@@ -69,7 +69,72 @@
         The project follows the tradition of "explorable explanations," where interaction itself becomes a learning method. Instead of persuading users through static graphics or lengthy text, the interface allows users to test different scenarios and immediately observe how changing one variable affects the overall outcome. This approach situates the project within communities of information visualization, explainable AI, and computational design that use interaction as a primary medium for communicating complex ideas.
     </p>
 
+    <section class="diagram-section" aria-labelledby="diagram-title">
+        <div class="section-title" id="diagram-title">Relational Analysis</div>
+
+        <p>
+            This actor–network diagram traces how historical conditions, fairness research,
+            synthetic data, interaction design, institutional actors, and critical omissions
+            converge in <em>Measuring Fairness</em>. Solid connections represent documented or
+            direct relationships; dashed connections identify critical, missing, or
+            interpretive relationships.
+        </p>
+
+        <figure class="diagram-figure">
+            <button class="diagram-open" type="button" aria-label="Open the actor–network diagram at full size">
+                <img
+                    src="assets/actor-network-diagram.png"
+                    alt="Actor–network diagram connecting the historical context, research methodology, rhetorical strategy, wider practice, missing actors, and critical assessment of Measuring Fairness."
+                    loading="lazy">
+                <span>Click to explore full size</span>
+            </button>
+            <figcaption>
+                <strong>How <em>Measuring Fairness</em> Makes an Argument.</strong>
+                Research lineage, production methodology, rhetorical strategy, wider practice,
+                historical context, and critical assessment.
+            </figcaption>
+        </figure>
+
+        <div class="diagram-takeaways" aria-label="Key findings from the relational analysis">
+            <article>
+                <span>01</span>
+                <p>The project translates established fairness research rather than originating the mathematical theorem.</p>
+            </article>
+            <article>
+                <span>02</span>
+                <p>Synthetic data makes the contradiction controllable and understandable, but removes real institutional complexity.</p>
+            </article>
+            <article>
+                <span>03</span>
+                <p>The user’s inability to equalize every metric becomes experiential evidence for the project’s argument.</p>
+            </article>
+            <article>
+                <span>04</span>
+                <p>The project explains statistical fairness successfully while leaving affected communities and deployment less visible.</p>
+            </article>
+        </div>
+    </section>
+
 </main>
+
+<dialog class="diagram-dialog" aria-label="Full-size actor–network diagram">
+    <button class="diagram-close" type="button" aria-label="Close full-size diagram">Close</button>
+    <div class="diagram-scroll">
+        <img src="assets/actor-network-diagram.png" alt="Full-size actor–network diagram for Measuring Fairness.">
+    </div>
+</dialog>
+
+<script>
+    const dialog = document.querySelector('.diagram-dialog');
+    const openDiagram = document.querySelector('.diagram-open');
+    const closeDiagram = document.querySelector('.diagram-close');
+
+    openDiagram.addEventListener('click', () => dialog.showModal());
+    closeDiagram.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+    });
+</script>
 
 </body>
 </html>
