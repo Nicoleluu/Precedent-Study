@@ -143,6 +143,14 @@ main{
     background:var(--rule);
 }
 
+.datasheet-title::after{
+    display:none;
+}
+
+.project-source{
+    margin-top:42px;
+}
+
 p{
     max-width:760px;
     margin:0 0 22px;
