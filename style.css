@@ -231,7 +231,7 @@ img{max-width:100%}
 
 .poster-context{
     max-width:820px;
-    margin:-24px 0 0;
+    margin:32px 0 0;
     padding:18px 20px;
     border-left:3px solid var(--coral);
     background:var(--paper-deep);
