@@ -614,6 +614,7 @@ img{max-width:100%}
 .influence-layer{
     display:flex;
     min-height:48px;
+    align-items:center;
     flex-wrap:wrap;
     justify-content:center;
     gap:8px;
@@ -622,7 +623,9 @@ img{max-width:100%}
 
 .influence{
     display:flex;
+    min-height:34px;
     align-items:center;
+    justify-content:center;
     gap:7px;
     padding:7px 10px;
     border-radius:999px;
@@ -632,7 +635,19 @@ img{max-width:100%}
 }
 
 .influence i{color:var(--coral);font-style:normal}
-.neutral-key{padding:7px 10px;border:1px solid var(--rule);border-radius:999px;color:var(--muted);font-size:11px}
+.neutral-key{
+    display:inline-flex;
+    min-height:38px;
+    align-items:center;
+    justify-content:center;
+    padding:7px 18px;
+    border:1px solid var(--rule);
+    border-radius:999px;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.2;
+    text-align:center;
+}
 .influence--included{background:var(--yellow-soft)}
 .influence--collector{background:var(--blue-soft)}
 .influence--recorded{background:var(--green-soft)}
