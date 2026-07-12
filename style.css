@@ -117,3 +117,188 @@ img{
     border-radius:12px;
     margin:30px 0;
 }
+
+.diagram-section{
+    margin-top:72px;
+}
+
+.diagram-figure{
+    margin:30px 0 0;
+}
+
+.diagram-open{
+    position:relative;
+    display:block;
+    width:100%;
+    padding:0;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:14px;
+    background:#090909;
+    color:white;
+    cursor:zoom-in;
+    box-shadow:0 24px 70px rgba(0,0,0,.2);
+}
+
+.diagram-open img{
+    display:block;
+    width:100%;
+    margin:0;
+    border-radius:0;
+    transition:transform .35s ease, opacity .35s ease;
+}
+
+.diagram-open span{
+    position:absolute;
+    right:16px;
+    bottom:16px;
+    padding:9px 13px;
+    border-radius:999px;
+    background:rgba(0,0,0,.78);
+    color:white;
+    font:500 12px/1 Roboto,sans-serif;
+    letter-spacing:.03em;
+}
+
+.diagram-open:hover img,
+.diagram-open:focus-visible img{
+    transform:scale(1.012);
+    opacity:.92;
+}
+
+.diagram-open:focus-visible,
+.diagram-close:focus-visible{
+    outline:3px solid #FFF59D;
+    outline-offset:4px;
+}
+
+.diagram-figure figcaption{
+    margin-top:14px;
+    color:rgba(255,255,255,.78);
+    font-size:13px;
+    line-height:1.6;
+}
+
+.diagram-takeaways{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+    margin-top:28px;
+}
+
+.diagram-takeaways article{
+    padding:18px;
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+}
+
+.diagram-takeaways span{
+    color:#FFF59D;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.12em;
+}
+
+.diagram-takeaways p{
+    margin:9px 0 0;
+    font-size:14px;
+    line-height:1.55;
+}
+
+.diagram-dialog{
+    width:min(96vw,1500px);
+    max-width:none;
+    height:min(94vh,1100px);
+    padding:0;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:14px;
+    background:#090909;
+    color:white;
+}
+
+.diagram-dialog::backdrop{
+    background:rgba(0,0,0,.88);
+    backdrop-filter:blur(5px);
+}
+
+.diagram-close{
+    position:absolute;
+    z-index:2;
+    top:14px;
+    right:14px;
+    padding:10px 15px;
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:999px;
+    background:rgba(0,0,0,.85);
+    color:white;
+    cursor:pointer;
+}
+
+.diagram-scroll{
+    width:100%;
+    height:100%;
+    overflow:auto;
+}
+
+.diagram-scroll img{
+    display:block;
+    width:max(1400px,100%);
+    max-width:none;
+    margin:0;
+    border-radius:0;
+}
+
+@media (max-width:720px){
+    header{
+        align-items:flex-start;
+        gap:18px;
+        padding:20px 22px;
+    }
+
+    .center{
+        display:none;
+    }
+
+    .right{
+        flex-wrap:wrap;
+        justify-content:flex-end;
+        gap:5px;
+    }
+
+    .right a{
+        padding:6px 9px;
+        font-size:12px;
+    }
+
+    main{
+        margin:54px auto;
+        padding:0 20px;
+    }
+
+    .project-title{
+        font-size:38px;
+    }
+
+    .diagram-takeaways{
+        grid-template-columns:1fr;
+    }
+
+    .diagram-open{
+        overflow-x:auto;
+    }
+
+    .diagram-open img{
+        width:1100px;
+        max-width:none;
+    }
+
+    .diagram-open span{
+        position:sticky;
+        left:16px;
+        float:left;
+        margin-top:-48px;
+        margin-bottom:14px;
+    }
+}
