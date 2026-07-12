@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layers of Analysis</title>
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
 </head>
 
 <body>
@@ -70,106 +70,68 @@
     </p>
 
     <section class="interactive-reference" aria-labelledby="interactive-title">
-        <div class="section-title" id="interactive-title">Annotated Interactive Reconstruction</div>
+        <div class="section-title" id="interactive-title">Interactive Claim</div>
 
-        <p>
-            This original reconstruction isolates the precedent’s central interaction pattern.
-            The two populations have different disease prevalence. Adjust each model’s
-            diagnostic aggressiveness and observe how improving or aligning one metric changes
-            the others.
-        </p>
-
-        <div class="interaction-note interaction-note--method">
-            <strong>Methodological annotation</strong>
-            <span>The population is synthetic: 40 cases per group, with fixed ground truth and deterministic model behavior. No patient data is used.</span>
+        <div class="claim-intro">
+            <span>Before the model</span>
+            <h2>How data becomes “truth”</h2>
+            <p>Data does not arrive neutral. Reveal the decisions that shape a dataset before an algorithm ever makes a prediction.</p>
         </div>
 
-        <div class="fairness-lab" data-fairness-lab>
-            <div class="lab-legend" aria-label="Visualization legend">
-                <span><i class="dot dot--tp"></i> Correctly diagnosed</span>
-                <span><i class="dot dot--fn"></i> Missed disease</span>
-                <span><i class="dot dot--fp"></i> Overdiagnosed</span>
-                <span><i class="dot dot--tn"></i> Correctly negative</span>
+        <div class="provenance-explorer" data-provenance-explorer>
+            <div class="provenance-controls" role="group" aria-label="Reveal decisions that shape data">
+                <button type="button" data-stage="collection" aria-pressed="false"><span>01</span>Collection</button>
+                <button type="button" data-stage="classification" aria-pressed="false"><span>02</span>Classification</button>
+                <button type="button" data-stage="labeling" aria-pressed="false"><span>03</span>Labeling</button>
+                <button type="button" data-stage="measurement" aria-pressed="false"><span>04</span>Measurement</button>
+                <button type="button" data-stage="history" aria-pressed="false"><span>05</span>History</button>
             </div>
 
-            <div class="lab-groups">
-                <article class="lab-group" data-group="adults">
-                    <header class="lab-group__header">
-                        <div>
-                            <span class="lab-kicker">Lower base rate</span>
-                            <h3>Adults</h3>
-                        </div>
-                        <strong class="prevalence">25% sick</strong>
-                    </header>
+            <div class="data-stage">
+                <div class="data-stage__header">
+                    <span data-progress>0 of 5 decisions revealed</span>
+                    <button type="button" class="reset-data" data-reset>Reset</button>
+                </div>
 
-                    <div class="people-grid" data-people aria-label="Adult model outcomes"></div>
+                <div class="data-flow" aria-live="polite">
+                    <div class="data-population">
+                        <span class="flow-label">World</span>
+                        <div class="data-points" data-points aria-label="A population before data collection"></div>
+                    </div>
+                    <span class="flow-arrow">→</span>
+                    <div class="data-box" data-box>
+                        <span>Dataset</span>
+                        <strong data-dataset-label>Appears neutral</strong>
+                    </div>
+                    <span class="flow-arrow">→</span>
+                    <div class="data-model">
+                        <span>Model</span>
+                        <strong>Prediction</strong>
+                    </div>
+                </div>
 
-                    <label class="threshold-control">
-                        <span>Model aggressiveness</span>
-                        <input type="range" min="0" max="100" value="50" data-threshold>
-                        <output data-threshold-output>50%</output>
-                    </label>
+                <div class="influence-layer" data-influences aria-label="Revealed influences on the dataset"></div>
 
-                    <dl class="metric-grid">
-                        <div><dt>Recall</dt><dd data-metric="recall">0%</dd></div>
-                        <div><dt>Precision</dt><dd data-metric="precision">0%</dd></div>
-                        <div><dt>Specificity</dt><dd data-metric="specificity">0%</dd></div>
-                    </dl>
-                </article>
-
-                <article class="lab-group" data-group="children">
-                    <header class="lab-group__header">
-                        <div>
-                            <span class="lab-kicker">Higher base rate</span>
-                            <h3>Children</h3>
-                        </div>
-                        <strong class="prevalence">50% sick</strong>
-                    </header>
-
-                    <div class="people-grid" data-people aria-label="Child model outcomes"></div>
-
-                    <label class="threshold-control">
-                        <span>Model aggressiveness</span>
-                        <input type="range" min="0" max="100" value="50" data-threshold>
-                        <output data-threshold-output>50%</output>
-                    </label>
-
-                    <dl class="metric-grid">
-                        <div><dt>Recall</dt><dd data-metric="recall">0%</dd></div>
-                        <div><dt>Precision</dt><dd data-metric="precision">0%</dd></div>
-                        <div><dt>Specificity</dt><dd data-metric="specificity">0%</dd></div>
-                    </dl>
-                </article>
-            </div>
-
-            <div class="metric-comparison" aria-live="polite">
-                <span>Current comparison</span>
-                <strong data-comparison>Adjust a threshold to compare the groups.</strong>
+                <div class="stage-explanation" data-explanation>
+                    <span>Select a stage</span>
+                    <h3>The clean dataset is an illusion.</h3>
+                    <p>Every dataset is produced through choices about people, categories, labels, measurements, and history.</p>
+                    <ul data-questions>
+                        <li>Who created the dataset?</li>
+                        <li>What decisions happened before the model?</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <div class="annotation-grid">
-            <article>
-                <span>01 / Immediate feedback</span>
-                <p>Every slider movement redistributes errors and recalculates the metrics. The interface makes an abstract statistical relationship feel causal and observable.</p>
-            </article>
-            <article>
-                <span>02 / Productive failure</span>
-                <p>Try matching recall, precision, and specificity simultaneously. The difficulty is intentional: the user’s failed attempt becomes evidence for the project’s claim.</p>
-            </article>
-            <article>
-                <span>03 / Rhetorical framing</span>
-                <p>The medical scenario gives false positives and false negatives intuitive consequences while presenting ground truth as unusually stable.</p>
-            </article>
-            <article>
-                <span>04 / Critical limitation</span>
-                <p>The controlled model explains metric conflict clearly, but it does not represent data collection, institutional power, appeals, or why base rates differ.</p>
-            </article>
+        <div class="claim-conclusion" data-conclusion hidden>
+            <span>Conclusion</span>
+            <p>The model does not encounter the world directly. It encounters a dataset produced through prior social, institutional, and technical decisions.</p>
+            <strong>Fairness must be examined before prediction—not only measured afterward.</strong>
         </div>
 
         <p class="reconstruction-credit">
-            Educational reconstruction by Nicole Lu for this precedent study. Inspired by the
-            interaction pattern of Google PAIR’s <em>Measuring Fairness</em>; no source code was copied.
+            Original interactive argument by Nicole Lu. It extends <em>Measuring Fairness</em> by questioning the presumed neutrality of base rates, categories, and ground truth.
         </p>
     </section>
 
