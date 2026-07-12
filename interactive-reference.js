@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
             visual: 'Faded and reduced points represent people whose information was excluded or underrepresented.'
         },
         collector: {
-            title: 'The collector brings a purpose and a point of view.',
-            body: 'A company, government agency, researcher, school, hospital, or platform collects data for a particular reason. Its goals and authority shape the dataset from the beginning.',
-            questions: ['Who wanted this information?', 'Why did they collect it?', 'How did their goals shape the process?'],
-            dataset: 'Institutional record',
-            visual: 'The blue institutional frame shows that the dataset is produced by an organization—not gathered from a neutral point of view.'
+            title: 'The collector decides what becomes a record.',
+            body: 'Data is gathered by an actor with a goal. That actor chooses what to observe, whom to ask, and how to record it. The resulting dataset reflects those choices.',
+            questions: ['Who needed the data?', 'What were they trying to learn or decide?', 'What did their purpose make visible—or overlook?'],
+            dataset: 'Records chosen for a purpose',
+            visual: 'The collector appears as an actor with three explicit choices. Those choices turn lived reality into selected records.'
         },
         recorded: {
             title: 'Only selected parts of a situation become data.',
@@ -77,7 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const shortLabel = selectedButton.textContent.replace(/^\d+/, '').trim();
         progress.textContent = `Viewing: ${shortLabel}`;
         datasetLabel.textContent = stage.dataset;
-        influences.innerHTML = `<span class="influence influence--${activeStage}">${shortLabel}<i>↓ visible effect</i></span>`;
+        influences.innerHTML = activeStage === 'collector'
+            ? `<div class="collector-process"><strong>Collector</strong><span>chooses who to observe</span><span>chooses what to record</span><span>chooses how to record it</span><i>These choices shape the dataset →</i></div>`
+            : `<span class="influence influence--${activeStage}">${shortLabel}<i>↓ visible effect</i></span>`;
         explanation.querySelector('span').textContent = `Selected question / ${shortLabel}`;
         explanation.querySelector('h3').textContent = stage.title;
         explanation.querySelector('p').textContent = stage.body;
