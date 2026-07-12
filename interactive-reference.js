@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: 'Data is gathered by an actor with a goal. That actor chooses what to observe, whom to ask, and how to record it. The resulting dataset reflects those choices.',
             questions: ['Who needed the data?', 'What were they trying to learn or decide?', 'What did their purpose make visible or overlook?'],
             dataset: 'Records chosen for a purpose',
-            visual: 'The collector appears as an actor with three explicit choices. Those choices turn lived reality into selected records.'
+            visual: 'Blue circles become selected records. Small faded circles remain overlooked, showing that the collector’s purpose affects which parts of the world enter the dataset.'
         },
         recorded: {
             title: 'Only selected parts of a situation become data.',
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: 'A record does not explain itself. A person or institution defines the categories and decides what evidence counts. Under a different rule, the same record can receive a different label.',
             questions: ['Who created the labeling rule?', 'What values are built into that rule?', 'Would another interpreter reach a different conclusion?'],
             dataset: 'Labels created by a chosen rule',
-            visual: 'The same record is shown twice. Rule A calls it one thing; Rule B calls it another. The label changes even though the underlying record does not.'
+            visual: 'Each circle is split between green and pink to show the same unchanged record receiving two possible meanings under different rules.'
         },
         missing: {
             title: 'Missing context can turn circumstances into assumptions.',
