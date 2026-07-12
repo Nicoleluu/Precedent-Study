@@ -7,98 +7,92 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Collection decides who becomes visible.',
             body: 'A dataset begins by selecting people, places, moments, and behaviors. What is not collected cannot be represented by the model.',
             questions: ['Who was observed?', 'Who was excluded?', 'Was participation voluntary?'],
-            influence: 'Selection',
-            className: 'is-collected'
+            dataset: 'Selected records',
+            visual: 'Faded and crossed-out points represent people or events excluded during collection.'
         },
         classification: {
             title: 'Categories are designed, not discovered.',
             body: 'People are sorted into groups that may appear natural but reflect administrative, cultural, and technical decisions.',
             questions: ['Who defined the groups?', 'Who does not fit?', 'Which differences are erased?'],
-            influence: 'Categories',
-            className: 'is-classified'
+            dataset: 'Assigned categories',
+            visual: 'Circles, squares, and diamonds show how continuous differences are forced into discrete categories.'
         },
         labeling: {
             title: 'Labels turn judgments into ground truth.',
             body: 'Terms such as “sick,” “risky,” or “successful” may combine observation with institutional interpretation and proxy measures.',
             questions: ['Who assigned the label?', 'Is it a fact or a proxy?', 'Whose judgment becomes truth?'],
-            influence: 'Labels',
-            className: 'is-labeled'
+            dataset: 'Labeled outcomes',
+            visual: 'Pink and green points show records assigned opposing labels, even though the underlying people remain more complex.'
         },
         measurement: {
             title: 'Measurement determines what can count.',
             body: 'Tools, thresholds, missing records, and uneven data quality shape the patterns later treated as evidence.',
             questions: ['What was measured?', 'What remained invisible?', 'Who experiences more measurement error?'],
-            influence: 'Instruments',
-            className: 'is-measured'
+            dataset: 'Measured proxies',
+            visual: 'Outlined points are measured confidently; blurred points represent missing, uncertain, or lower-quality measurements.'
         },
         history: {
             title: 'History is embedded in the base rate.',
             body: 'Observed differences may reflect unequal access, discrimination, enforcement, environmental exposure, or previous institutional decisions.',
             questions: ['Why are outcomes different?', 'Does the data record inequality?', 'Will the model reproduce it?'],
-            influence: 'History',
-            className: 'is-historical'
+            dataset: 'Historical conditions',
+            visual: 'The unequal background bands show that records enter the dataset from different structural conditions—not from a level field.'
         }
     };
 
-    const active = new Set();
+    let activeStage = null;
     const points = explorer.querySelector('[data-points]');
     const dataBox = explorer.querySelector('[data-box]');
-    const influences = explorer.querySelector('[data-influences]');
     const progress = explorer.querySelector('[data-progress]');
     const datasetLabel = explorer.querySelector('[data-dataset-label]');
     const explanation = explorer.querySelector('[data-explanation]');
-    const conclusion = document.querySelector('[data-conclusion]');
+    const influences = explorer.querySelector('[data-influences]');
 
     points.innerHTML = Array.from({ length: 48 }, (_, index) =>
         `<i class="raw-point" style="--i:${index}" aria-hidden="true"></i>`
     ).join('');
 
-    function showExplanation(key) {
-        const stage = stages[key];
-        explanation.querySelector('span').textContent = `Revealed influence / ${stage.influence}`;
-        explanation.querySelector('h3').textContent = stage.title;
-        explanation.querySelector('p').textContent = stage.body;
-        explanation.querySelector('[data-questions]').innerHTML = stage.questions.map(q => `<li>${q}</li>`).join('');
-    }
-
     function render() {
-        Object.values(stages).forEach(stage => dataBox.classList.toggle(stage.className, active.has(Object.keys(stages).find(key => stages[key] === stage))));
-
         explorer.querySelectorAll('[data-stage]').forEach(button => {
-            button.setAttribute('aria-pressed', String(active.has(button.dataset.stage)));
+            button.setAttribute('aria-pressed', String(button.dataset.stage === activeStage));
         });
 
-        influences.innerHTML = [...active].map(key =>
-            `<span class="influence influence--${key}">${stages[key].influence}<i>↓</i></span>`
-        ).join('');
+        points.dataset.stage = activeStage || 'neutral';
+        dataBox.dataset.stage = activeStage || 'neutral';
 
-        progress.textContent = `${active.size} of 5 decisions revealed`;
-        datasetLabel.textContent = active.size === 0
-            ? 'Appears neutral'
-            : active.size === 5
-                ? 'Situated and constructed'
-                : 'Being shaped';
+        if (!activeStage) {
+            progress.textContent = 'Select one lens to inspect the dataset';
+            datasetLabel.textContent = 'Appears neutral';
+            influences.innerHTML = '<span class="neutral-key">Gray circles = records presented as neutral</span>';
+            explanation.querySelector('span').textContent = 'No lens selected';
+            explanation.querySelector('h3').textContent = 'The clean dataset is an illusion.';
+            explanation.querySelector('p').textContent = 'Every dataset is produced through choices about people, categories, labels, measurements, and history.';
+            explanation.querySelector('[data-questions]').innerHTML = '<li>Who created the dataset?</li><li>What decisions happened before the model?</li>';
+            explanation.querySelector('[data-visual-key] span').textContent = 'The gray circles represent records before a particular influence is examined.';
+            return;
+        }
 
-        points.dataset.activeCount = active.size;
-        conclusion.hidden = active.size !== 5;
+        const stage = stages[activeStage];
+        progress.textContent = `Viewing lens: ${activeStage}`;
+        datasetLabel.textContent = stage.dataset;
+        influences.innerHTML = `<span class="influence influence--${activeStage}">${activeStage}<i>↓ changes shown below</i></span>`;
+        explanation.querySelector('span').textContent = `Selected lens / ${activeStage}`;
+        explanation.querySelector('h3').textContent = stage.title;
+        explanation.querySelector('p').textContent = stage.body;
+        explanation.querySelector('[data-questions]').innerHTML = stage.questions.map(question => `<li>${question}</li>`).join('');
+        explanation.querySelector('[data-visual-key] span').textContent = stage.visual;
     }
 
     explorer.addEventListener('click', event => {
-        const button = event.target.closest('[data-stage]');
-        if (button) {
-            const key = button.dataset.stage;
-            active.has(key) ? active.delete(key) : active.add(key);
-            showExplanation(key);
+        const stageButton = event.target.closest('[data-stage]');
+        if (stageButton) {
+            activeStage = stageButton.dataset.stage;
             render();
             return;
         }
 
         if (event.target.closest('[data-reset]')) {
-            active.clear();
-            explanation.querySelector('span').textContent = 'Select a stage';
-            explanation.querySelector('h3').textContent = 'The clean dataset is an illusion.';
-            explanation.querySelector('p').textContent = 'Every dataset is produced through choices about people, categories, labels, measurements, and history.';
-            explanation.querySelector('[data-questions]').innerHTML = '<li>Who created the dataset?</li><li>What decisions happened before the model?</li>';
+            activeStage = null;
             render();
         }
     });
