@@ -1,88 +1,107 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const lab = document.querySelector('[data-fairness-lab]');
-    if (!lab) return;
+    const explorer = document.querySelector('[data-provenance-explorer]');
+    if (!explorer) return;
 
-    const definitions = {
-        adults: { prevalence: 0.25, phase: 3 },
-        children: { prevalence: 0.50, phase: 11 }
+    const stages = {
+        collection: {
+            title: 'Collection decides who becomes visible.',
+            body: 'A dataset begins by selecting people, places, moments, and behaviors. What is not collected cannot be represented by the model.',
+            questions: ['Who was observed?', 'Who was excluded?', 'Was participation voluntary?'],
+            influence: 'Selection',
+            className: 'is-collected'
+        },
+        classification: {
+            title: 'Categories are designed, not discovered.',
+            body: 'People are sorted into groups that may appear natural but reflect administrative, cultural, and technical decisions.',
+            questions: ['Who defined the groups?', 'Who does not fit?', 'Which differences are erased?'],
+            influence: 'Categories',
+            className: 'is-classified'
+        },
+        labeling: {
+            title: 'Labels turn judgments into ground truth.',
+            body: 'Terms such as “sick,” “risky,” or “successful” may combine observation with institutional interpretation and proxy measures.',
+            questions: ['Who assigned the label?', 'Is it a fact or a proxy?', 'Whose judgment becomes truth?'],
+            influence: 'Labels',
+            className: 'is-labeled'
+        },
+        measurement: {
+            title: 'Measurement determines what can count.',
+            body: 'Tools, thresholds, missing records, and uneven data quality shape the patterns later treated as evidence.',
+            questions: ['What was measured?', 'What remained invisible?', 'Who experiences more measurement error?'],
+            influence: 'Instruments',
+            className: 'is-measured'
+        },
+        history: {
+            title: 'History is embedded in the base rate.',
+            body: 'Observed differences may reflect unequal access, discrimination, enforcement, environmental exposure, or previous institutional decisions.',
+            questions: ['Why are outcomes different?', 'Does the data record inequality?', 'Will the model reproduce it?'],
+            influence: 'History',
+            className: 'is-historical'
+        }
     };
 
-    const groupStates = {};
+    const active = new Set();
+    const points = explorer.querySelector('[data-points]');
+    const dataBox = explorer.querySelector('[data-box]');
+    const influences = explorer.querySelector('[data-influences]');
+    const progress = explorer.querySelector('[data-progress]');
+    const datasetLabel = explorer.querySelector('[data-dataset-label]');
+    const explanation = explorer.querySelector('[data-explanation]');
+    const conclusion = document.querySelector('[data-conclusion]');
 
-    function pct(value) {
-        return `${Math.round(value * 100)}%`;
+    points.innerHTML = Array.from({ length: 48 }, (_, index) =>
+        `<i class="raw-point" style="--i:${index}" aria-hidden="true"></i>`
+    ).join('');
+
+    function showExplanation(key) {
+        const stage = stages[key];
+        explanation.querySelector('span').textContent = `Revealed influence / ${stage.influence}`;
+        explanation.querySelector('h3').textContent = stage.title;
+        explanation.querySelector('p').textContent = stage.body;
+        explanation.querySelector('[data-questions]').innerHTML = stage.questions.map(q => `<li>${q}</li>`).join('');
     }
 
-    function safeDivide(a, b) {
-        return b === 0 ? 0 : a / b;
+    function render() {
+        Object.values(stages).forEach(stage => dataBox.classList.toggle(stage.className, active.has(Object.keys(stages).find(key => stages[key] === stage))));
+
+        explorer.querySelectorAll('[data-stage]').forEach(button => {
+            button.setAttribute('aria-pressed', String(active.has(button.dataset.stage)));
+        });
+
+        influences.innerHTML = [...active].map(key =>
+            `<span class="influence influence--${key}">${stages[key].influence}<i>↓</i></span>`
+        ).join('');
+
+        progress.textContent = `${active.size} of 5 decisions revealed`;
+        datasetLabel.textContent = active.size === 0
+            ? 'Appears neutral'
+            : active.size === 5
+                ? 'Situated and constructed'
+                : 'Being shaped';
+
+        points.dataset.activeCount = active.size;
+        conclusion.hidden = active.size !== 5;
     }
 
-    function renderGroup(group) {
-        const key = group.dataset.group;
-        const definition = definitions[key];
-        const threshold = Number(group.querySelector('[data-threshold]').value) / 100;
-        const total = 40;
-        const sickTotal = Math.round(total * definition.prevalence);
-        const recallTarget = 0.35 + threshold * 0.62;
-        const falsePositiveTarget = 0.03 + threshold * 0.52;
-
-        let tp = 0, fn = 0, fp = 0, tn = 0;
-        const outcomes = [];
-
-        for (let i = 0; i < total; i += 1) {
-            const sick = i < sickTotal;
-            const sample = ((i * 17 + definition.phase) % 41) / 40;
-            const predictedPositive = sick
-                ? sample < recallTarget
-                : sample < falsePositiveTarget;
-
-            let outcome;
-            if (sick && predictedPositive) { outcome = 'tp'; tp += 1; }
-            if (sick && !predictedPositive) { outcome = 'fn'; fn += 1; }
-            if (!sick && predictedPositive) { outcome = 'fp'; fp += 1; }
-            if (!sick && !predictedPositive) { outcome = 'tn'; tn += 1; }
-            outcomes.push(outcome);
+    explorer.addEventListener('click', event => {
+        const button = event.target.closest('[data-stage]');
+        if (button) {
+            const key = button.dataset.stage;
+            active.has(key) ? active.delete(key) : active.add(key);
+            showExplanation(key);
+            render();
+            return;
         }
 
-        const recall = safeDivide(tp, tp + fn);
-        const precision = safeDivide(tp, tp + fp);
-        const specificity = safeDivide(tn, tn + fp);
-        groupStates[key] = { recall, precision, specificity };
-
-        group.querySelector('[data-people]').innerHTML = outcomes
-            .map((outcome, index) => `<i class="person person--${outcome}" title="Case ${index + 1}: ${outcome.toUpperCase()}"></i>`)
-            .join('');
-
-        group.querySelector('[data-threshold-output]').value = pct(threshold);
-        group.querySelector('[data-metric="recall"]').textContent = pct(recall);
-        group.querySelector('[data-metric="precision"]').textContent = pct(precision);
-        group.querySelector('[data-metric="specificity"]').textContent = pct(specificity);
-    }
-
-    function updateComparison() {
-        const adult = groupStates.adults;
-        const child = groupStates.children;
-        if (!adult || !child) return;
-
-        const differences = [
-            ['recall', Math.abs(adult.recall - child.recall)],
-            ['precision', Math.abs(adult.precision - child.precision)],
-            ['specificity', Math.abs(adult.specificity - child.specificity)]
-        ].sort((a, b) => a[1] - b[1]);
-
-        const closest = differences[0];
-        const furthest = differences[2];
-        lab.querySelector('[data-comparison]').textContent =
-            `${closest[0][0].toUpperCase() + closest[0].slice(1)} is closest (${Math.round(closest[1] * 100)}-point gap), while ${furthest[0]} differs by ${Math.round(furthest[1] * 100)} points.`;
-    }
-
-    const groups = [...lab.querySelectorAll('[data-group]')];
-    groups.forEach(renderGroup);
-    updateComparison();
-
-    lab.addEventListener('input', (event) => {
-        if (!event.target.matches('[data-threshold]')) return;
-        renderGroup(event.target.closest('[data-group]'));
-        updateComparison();
+        if (event.target.closest('[data-reset]')) {
+            active.clear();
+            explanation.querySelector('span').textContent = 'Select a stage';
+            explanation.querySelector('h3').textContent = 'The clean dataset is an illusion.';
+            explanation.querySelector('p').textContent = 'Every dataset is produced through choices about people, categories, labels, measurements, and history.';
+            explanation.querySelector('[data-questions]').innerHTML = '<li>Who created the dataset?</li><li>What decisions happened before the model?</li>';
+            render();
+        }
     });
+
+    render();
 });
