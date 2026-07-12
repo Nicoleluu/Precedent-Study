@@ -96,7 +96,7 @@ header{
 main{
     width:min(1100px,calc(100% - 48px));
     margin:0 auto;
-    padding:clamp(70px,10vw,140px) 0 120px;
+    padding:clamp(36px,5vw,64px) 0 64px;
 }
 
 .project-meta{
@@ -110,7 +110,7 @@ main{
 .project-title{
     max-width:900px;
     margin:14px 0 12px;
-    font-size:clamp(40px,5vw,64px);
+    font-size:clamp(34px,4.25vw,52px);
     font-weight:700;
     letter-spacing:-.045em;
     line-height:.98;
@@ -118,7 +118,7 @@ main{
 
 .project-subtitle{
     max-width:700px;
-    margin-bottom:clamp(70px,10vw,120px);
+    margin-bottom:clamp(44px,6vw,72px);
     color:var(--muted);
     font-size:19px;
     line-height:1.5;
@@ -341,13 +341,13 @@ img{max-width:100%}
 
     main{
         width:min(100% - 36px,1100px);
-        padding-top:62px;
+        padding-top:34px;
     }
 
-    .project-title{font-size:40px}
+    .project-title{font-size:34px}
 
     .project-subtitle{
-        margin-bottom:70px;
+        margin-bottom:44px;
         font-size:17px;
     }
 
