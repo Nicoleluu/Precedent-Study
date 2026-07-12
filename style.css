@@ -716,7 +716,16 @@ img{max-width:100%}
     box-shadow:none;
 }
 
-.data-points[data-stage="collector"] .raw-point{background:#a9aaab}
+.data-points[data-stage="collector"] .raw-point{
+    background:var(--blue);
+}
+
+.data-points[data-stage="collector"] .raw-point:nth-child(4n),
+.data-points[data-stage="collector"] .raw-point:nth-child(7n){
+    opacity:.18;
+    background:#a9aaab;
+    transform:scale(.72);
+}
 
 .data-points[data-stage="recorded"] .raw-point:nth-child(3n){
     background:transparent;
@@ -728,7 +737,10 @@ img{max-width:100%}
     filter:blur(2px);
 }
 
-.data-points[data-stage="interpreted"] .raw-point{background:#a9aaab}
+.data-points[data-stage="interpreted"] .raw-point{
+    border:1px solid rgba(52,54,57,.12);
+    background:linear-gradient(90deg,var(--green) 0 50%,var(--coral) 50% 100%);
+}
 
 .data-points[data-stage="missing"]{
     background:linear-gradient(90deg,var(--coral-soft) 0 35%,var(--yellow-soft) 35% 68%,var(--blue-soft) 68% 100%);
