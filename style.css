@@ -151,6 +151,15 @@ p{
     line-height:1.75;
 }
 
+p small{
+    display:inline-block;
+    max-width:720px;
+    margin-top:7px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.55;
+}
+
 strong{font-weight:700}
 
 a{
