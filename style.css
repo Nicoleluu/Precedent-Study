@@ -134,7 +134,7 @@ img{
     overflow:hidden;
     border:1px solid rgba(255,255,255,.28);
     border-radius:14px;
-    background:#090909;
+    background:#f7f4ec;
     color:white;
     cursor:zoom-in;
     box-shadow:0 24px 70px rgba(0,0,0,.2);
@@ -214,7 +214,7 @@ img{
     overflow:hidden;
     border:1px solid rgba(255,255,255,.25);
     border-radius:14px;
-    background:#090909;
+    background:#f7f4ec;
     color:white;
 }
 
