@@ -77,11 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const shortLabel = selectedButton.textContent.replace(/^\d+/, '').trim();
         progress.textContent = `Viewing: ${shortLabel}`;
         datasetLabel.textContent = stage.dataset;
-        influences.innerHTML = activeStage === 'collector'
-            ? `<div class="collector-process"><strong>Collector</strong><span>chooses who to observe</span><span>chooses what to record</span><span>chooses how to record it</span><i>These choices shape the dataset →</i></div>`
-            : activeStage === 'interpreted'
-                ? `<div class="interpreter-process"><strong>Same record</strong><span class="record-sample">●</span><i>interpreted using</i><span class="rule rule-a">Rule A → acceptable</span><span class="rule rule-b">Rule B → risky</span><b>The record stays the same; its assigned meaning changes.</b></div>`
-                : `<span class="influence influence--${activeStage}">${shortLabel}<i>↓ visible effect</i></span>`;
+        influences.innerHTML = `<span class="influence influence--${activeStage}">${shortLabel}<i>↓ visible effect</i></span>`;
         explanation.querySelector('span').textContent = `Selected question / ${shortLabel}`;
         explanation.querySelector('h3').textContent = stage.title;
         explanation.querySelector('p').textContent = stage.body;
