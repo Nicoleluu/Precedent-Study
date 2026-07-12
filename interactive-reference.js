@@ -3,40 +3,40 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!explorer) return;
 
     const stages = {
-        collection: {
-            title: 'Collection decides who becomes visible.',
-            body: 'A dataset begins by selecting people, places, moments, and behaviors. What is not collected cannot be represented by the model.',
-            questions: ['Who was observed?', 'Who was excluded?', 'Was participation voluntary?'],
-            dataset: 'Selected records',
-            visual: 'Faded and crossed-out points represent people or events excluded during collection.'
+        included: {
+            title: 'The dataset represents some people more clearly than others.',
+            body: 'Before analysis begins, someone determines whose information enters the dataset. People who are absent, underrepresented, or difficult to observe become less visible to the model.',
+            questions: ['Whose information is present?', 'Who is missing?', 'Does this sample represent the population?'],
+            dataset: 'Selected people',
+            visual: 'Faded and reduced points represent people whose information was excluded or underrepresented.'
         },
-        classification: {
-            title: 'Categories are designed, not discovered.',
-            body: 'People are sorted into groups that may appear natural but reflect administrative, cultural, and technical decisions.',
-            questions: ['Who defined the groups?', 'Who does not fit?', 'Which differences are erased?'],
-            dataset: 'Assigned categories',
-            visual: 'Circles, squares, and diamonds show how continuous differences are forced into discrete categories.'
+        collector: {
+            title: 'The collector brings a purpose and a point of view.',
+            body: 'A company, government agency, researcher, school, hospital, or platform collects data for a particular reason. Its goals and authority shape the dataset from the beginning.',
+            questions: ['Who wanted this information?', 'Why did they collect it?', 'How did their goals shape the process?'],
+            dataset: 'Institutional record',
+            visual: 'The blue institutional frame shows that the dataset is produced by an organization—not gathered from a neutral point of view.'
         },
-        labeling: {
-            title: 'Labels turn judgments into ground truth.',
-            body: 'Terms such as “sick,” “risky,” or “successful” may combine observation with institutional interpretation and proxy measures.',
-            questions: ['Who assigned the label?', 'Is it a fact or a proxy?', 'Whose judgment becomes truth?'],
-            dataset: 'Labeled outcomes',
-            visual: 'Pink and green points show records assigned opposing labels, even though the underlying people remain more complex.'
+        recorded: {
+            title: 'Only selected parts of a situation become data.',
+            body: 'A dataset records particular fields while leaving other circumstances unobserved. What is easy to count may replace what is actually important.',
+            questions: ['What information was recorded?', 'Which circumstances were left out?', 'Can these fields represent the whole situation?'],
+            dataset: 'Selected fields',
+            visual: 'Outlined points represent recorded fields; blurred points represent context that was unavailable, uncertain, or never measured.'
         },
-        measurement: {
-            title: 'Measurement determines what can count.',
-            body: 'Tools, thresholds, missing records, and uneven data quality shape the patterns later treated as evidence.',
-            questions: ['What was measured?', 'What remained invisible?', 'Who experiences more measurement error?'],
-            dataset: 'Measured proxies',
-            visual: 'Outlined points are measured confidently; blurred points represent missing, uncertain, or lower-quality measurements.'
+        interpreted: {
+            title: 'Someone decides what the information means.',
+            body: 'Recorded information does not interpret itself. People and institutions decide what counts as positive, negative, successful, risky, normal, or abnormal.',
+            questions: ['Who defined the outcome?', 'Is the label a fact or a judgment?', 'Could the same record be interpreted differently?'],
+            dataset: 'Interpreted labels',
+            visual: 'Green and pink points show opposing labels imposed on records that originally appeared the same.'
         },
-        history: {
-            title: 'History is embedded in the base rate.',
-            body: 'Observed differences may reflect unequal access, discrimination, enforcement, environmental exposure, or previous institutional decisions.',
-            questions: ['Why are outcomes different?', 'Does the data record inequality?', 'Will the model reproduce it?'],
-            dataset: 'Historical conditions',
-            visual: 'The unequal background bands show that records enter the dataset from different structural conditions—not from a level field.'
+        missing: {
+            title: 'Missing context can turn circumstances into assumptions.',
+            body: 'Personal, social, and institutional conditions often disappear when experience is converted into data. The model may then treat past inequality as evidence about an individual or group.',
+            questions: ['What happened before this record?', 'What conditions affected the outcome?', 'Is inequality being mistaken for identity?'],
+            dataset: 'Incomplete context',
+            visual: 'Unequal background bands represent different conditions surrounding the records—conditions the dataset may fail to explain.'
         }
     };
 
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ).join('');
 
     function render() {
-        explorer.querySelectorAll('[data-stage]').forEach(button => {
+        explorer.querySelectorAll('button[data-stage]').forEach(button => {
             button.setAttribute('aria-pressed', String(button.dataset.stage === activeStage));
         });
 
@@ -61,22 +61,24 @@ document.addEventListener('DOMContentLoaded', () => {
         dataBox.dataset.stage = activeStage || 'neutral';
 
         if (!activeStage) {
-            progress.textContent = 'Select one lens to inspect the dataset';
+            progress.textContent = 'Select one question to inspect the dataset';
             datasetLabel.textContent = 'Appears neutral';
             influences.innerHTML = '<span class="neutral-key">Gray circles = records presented as neutral</span>';
-            explanation.querySelector('span').textContent = 'No lens selected';
+            explanation.querySelector('span').textContent = 'No question selected';
             explanation.querySelector('h3').textContent = 'The clean dataset is an illusion.';
-            explanation.querySelector('p').textContent = 'Every dataset is produced through choices about people, categories, labels, measurements, and history.';
-            explanation.querySelector('[data-questions]').innerHTML = '<li>Who created the dataset?</li><li>What decisions happened before the model?</li>';
-            explanation.querySelector('[data-visual-key] span').textContent = 'The gray circles represent records before a particular influence is examined.';
+            explanation.querySelector('p').textContent = 'A dataset reflects who was included, who gathered the information, what they recorded, how they interpreted it, and what context was left out.';
+            explanation.querySelector('[data-questions]').innerHTML = '<li>Who shaped the dataset?</li><li>What decisions happened before the model?</li>';
+            explanation.querySelector('[data-visual-key] span').textContent = 'The gray circles represent records before one of these questions is examined.';
             return;
         }
 
         const stage = stages[activeStage];
-        progress.textContent = `Viewing lens: ${activeStage}`;
+        const selectedButton = explorer.querySelector(`[data-stage="${activeStage}"]`);
+        const shortLabel = selectedButton.textContent.replace(/^\d+/, '').trim();
+        progress.textContent = `Viewing: ${shortLabel}`;
         datasetLabel.textContent = stage.dataset;
-        influences.innerHTML = `<span class="influence influence--${activeStage}">${activeStage}<i>↓ changes shown below</i></span>`;
-        explanation.querySelector('span').textContent = `Selected lens / ${activeStage}`;
+        influences.innerHTML = `<span class="influence influence--${activeStage}">${shortLabel}<i>↓ visible effect</i></span>`;
+        explanation.querySelector('span').textContent = `Selected question / ${shortLabel}`;
         explanation.querySelector('h3').textContent = stage.title;
         explanation.querySelector('p').textContent = stage.body;
         explanation.querySelector('[data-questions]').innerHTML = stage.questions.map(question => `<li>${question}</li>`).join('');
@@ -84,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     explorer.addEventListener('click', event => {
-        const stageButton = event.target.closest('[data-stage]');
+        const stageButton = event.target.closest('button[data-stage]');
         if (stageButton) {
             activeStage = stageButton.dataset.stage;
             render();
