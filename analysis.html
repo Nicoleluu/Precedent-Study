@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layers of Analysis</title>
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=10">
 </head>
 
 <body>
@@ -89,7 +89,7 @@
 
             <div class="data-stage">
                 <div class="data-stage__header">
-                    <span data-progress>0 of 5 decisions revealed</span>
+                    <span data-progress>Select one lens to inspect the dataset</span>
                     <button type="button" class="reset-data" data-reset>Reset</button>
                 </div>
 
@@ -120,11 +120,15 @@
                         <li>Who created the dataset?</li>
                         <li>What decisions happened before the model?</li>
                     </ul>
+                    <div class="visual-key" data-visual-key>
+                        <strong>How to read the visual</strong>
+                        <span>The gray circles represent records before a particular influence is examined.</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="claim-conclusion" data-conclusion hidden>
+        <div class="claim-conclusion" data-conclusion>
             <span>Conclusion</span>
             <p>The model does not encounter the world directly. It encounters a dataset produced through prior social, institutional, and technical decisions.</p>
             <strong>Fairness must be examined before prediction—not only measured afterward.</strong>
