@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         collector: {
             title: 'The collector decides what becomes a record.',
             body: 'Data is gathered by an actor with a goal. That actor chooses what to observe, whom to ask, and how to record it. The resulting dataset reflects those choices.',
-            questions: ['Who needed the data?', 'What were they trying to learn or decide?', 'What did their purpose make visible—or overlook?'],
+            questions: ['Who needed the data?', 'What were they trying to learn or decide?', 'What did their purpose make visible or overlook?'],
             dataset: 'Records chosen for a purpose',
             visual: 'The collector appears as an actor with three explicit choices. Those choices turn lived reality into selected records.'
         },
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: 'Personal, social, and institutional conditions often disappear when experience is converted into data. The model may then treat past inequality as evidence about an individual or group.',
             questions: ['What happened before this record?', 'What conditions affected the outcome?', 'Is inequality being mistaken for identity?'],
             dataset: 'Incomplete context',
-            visual: 'Unequal background bands represent different conditions surrounding the records—conditions the dataset may fail to explain.'
+            visual: 'Unequal background bands represent different conditions surrounding the records, including conditions the dataset may fail to explain.'
         }
     };
 
