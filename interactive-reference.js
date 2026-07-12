@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
             visual: 'Outlined points represent recorded fields; blurred points represent context that was unavailable, uncertain, or never measured.'
         },
         interpreted: {
-            title: 'Someone decides what the information means.',
-            body: 'Recorded information does not interpret itself. People and institutions decide what counts as positive, negative, successful, risky, normal, or abnormal.',
-            questions: ['Who defined the outcome?', 'Is the label a fact or a judgment?', 'Could the same record be interpreted differently?'],
-            dataset: 'Interpreted labels',
-            visual: 'Green and pink points show opposing labels imposed on records that originally appeared the same.'
+            title: 'The interpreter chooses the rule that gives a record meaning.',
+            body: 'A record does not explain itself. A person or institution defines the categories and decides what evidence counts. Under a different rule, the same record can receive a different label.',
+            questions: ['Who created the labeling rule?', 'What values are built into that rule?', 'Would another interpreter reach a different conclusion?'],
+            dataset: 'Labels created by a chosen rule',
+            visual: 'The same record is shown twice. Rule A calls it one thing; Rule B calls it another. The label changes even though the underlying record does not.'
         },
         missing: {
             title: 'Missing context can turn circumstances into assumptions.',
@@ -79,7 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         datasetLabel.textContent = stage.dataset;
         influences.innerHTML = activeStage === 'collector'
             ? `<div class="collector-process"><strong>Collector</strong><span>chooses who to observe</span><span>chooses what to record</span><span>chooses how to record it</span><i>These choices shape the dataset →</i></div>`
-            : `<span class="influence influence--${activeStage}">${shortLabel}<i>↓ visible effect</i></span>`;
+            : activeStage === 'interpreted'
+                ? `<div class="interpreter-process"><strong>Same record</strong><span class="record-sample">●</span><i>interpreted using</i><span class="rule rule-a">Rule A → acceptable</span><span class="rule rule-b">Rule B → risky</span><b>The record stays the same; its assigned meaning changes.</b></div>`
+                : `<span class="influence influence--${activeStage}">${shortLabel}<i>↓ visible effect</i></span>`;
         explanation.querySelector('span').textContent = `Selected question / ${shortLabel}`;
         explanation.querySelector('h3').textContent = stage.title;
         explanation.querySelector('p').textContent = stage.body;
